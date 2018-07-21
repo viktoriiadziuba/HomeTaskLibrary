@@ -1,0 +1,126 @@
+drop database if exists library;
+create database library char set utf8;
+
+use library;
+
+create table user(
+id int not null primary key auto_increment,
+name varchar(30) not null,
+adress varchar(100),
+phone_number int unique,
+date_of_birth datetime not null,
+details text,
+taken_book_id int
+);
+
+create table book(
+id int not null primary key auto_increment,
+isbn bigint not null,
+book_name varchar(50) not null,
+publication_date date not null
+);
+
+create table author(
+id int not null primary key auto_increment,
+name varchar(30) not null,
+surname varchar(30) not null
+);
+
+create table category(
+id int not null primary key auto_increment,
+name varchar(30) not null
+);
+
+create table taken_book(
+id int not null primary key auto_increment,
+taken_date date not null,
+date_to date not null,
+book_id int
+);
+
+create table author_book(
+id int not null primary key auto_increment,
+author_id int,
+book_id int 
+);
+
+create table category_book(
+id int not null primary key auto_increment,
+category_id int,
+book_id int 
+);
+
+
+
+alter table author_book add foreign key (author_id) 
+   references author(id);
+   
+alter table author_book add foreign key (book_id)
+   references book(id);
+   
+alter table category_book add foreign key (category_id)
+   references category(id);
+   
+alter table category_book add foreign key (book_id)
+   references book(id);   
+
+ alter table taken_book add foreign key (book_id)
+    references book(id);
+    
+alter table user add foreign key (taken_book_id)
+   references taken_book(id);
+ 
+ insert into author(name, surname) values
+                           ('Маргарет', 'Мітчелл'),
+                           ('Артур', 'Конан-Дойл'),
+                           ('Колін', 'Маккалоу'),
+                           ('Гаррієт', 'Бічер-Стоу'),
+                           ('Еріх Марія', 'Ремарк'),
+                           ('Михало', 'Булгаков'),
+                           ('Деніел', 'Кіз');
+                           
+insert into book(isbn, book_name, publication_date) values 
+						 ('9784003234242 ', 'Звіяні вітром', '1936-12-15'),
+                         ('9781465449559', 'Шерлок Холмс', '1892-10-14'),
+                         ('9782266158299', 'Ті, що співають у терні', '1977-08-10'),
+                         ('9782075079594', 'Хатина дядька Тома', '1852-05-17'),
+                         ('9783548002644', 'Три товариші', '1936-02-20'),
+                         ('9781517322977', 'Майстер і Маргарита', '1967-04-27'),
+                         ('9788842930099', 'Таємнича історія Біллі Міллігана', '1981-10-09');       
+                         
+insert into author_book(author_id, book_id) values
+                                   (1, 1),
+                                   (2, 2),
+                                   (3, 3),
+                                   (4, 4),
+                                   (5, 5),
+                                   (6, 6),
+                                   (7, 7);
+
+insert into category(name) values
+                               ('Роман'),
+							   ('Детектив'),
+							   ('Біографія');
+                               
+insert into category_book(book_id, category_id) values
+                                         (1, 1),
+                                         (2, 2),
+                                         (3, 1),
+                                         (4, 1),
+                                         (5, 1),
+                                         (6, 1),
+                                         (7, 3);
+                               
+insert into taken_book(taken_date, date_to) values
+                                   ('2018-04-18', '2018-08-18'),
+                                   ('2018-06-10', '2018-07-30'),
+                                   ('2018-05-12', '2018-08-12'),
+                                   ('2018-06-07', '2018-08-07'),
+                                   ('2018-07-07', '2018-09-07');
+ 
+insert into user(name, adress, phone_number, date_of_birth, details, taken_book_id) values 
+					    ('Юра', 'вул.Пулюя, 29', '0976971866', '1996-10-09', 'інженер', 2),
+                        ('Олег', 'вул.Стрийська, 71Б', '0961339142', '1996-05-20', 'програміст', 3),
+                        ('Карoліна', 'вул.Стрийська, 71Б', '0967456599', '1996-11-23', 'HR', 1),
+                        ('Вікторія', 'вул.Пулюя, 29', '0968404150', '1997-05-18', 'програміст', 4),
+                        ('Юлія', 'вул.Княгині Ольги, 100И', '0931351404', '1997-08-15', 'фотограф', 5);
